@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
-import pickle
+import joblib  # Wapas joblib use kar rahe hain kyunki aapka model joblib se bana hai
 
-# 1. Saved Model ko standard pickle se load karein
-with open('starbucks_decision_tree.pkl', 'rb') as file:
-    model = pickle.load(file)
+# 1. Saved Model ko joblib ke zariye load karein
+model = joblib.load('starbucks_decision_tree.pkl')
 
 # 2. App ka Title aur Header
 st.set_page_config(page_title="Starbucks Drink Predictor", page_icon="☕", layout="centered")
@@ -24,7 +23,12 @@ st.markdown("---")
 
 # 4. Prediction Button
 if st.button("🔮 Predict Category", type="primary"):
+    # Input ko dataframe me badlein
     input_data = pd.DataFrame([[calories, sugar, fat]], columns=['Calories', 'Sugars (g)', 'Total Fat (g)'])
+    
+    # Model prediction
     prediction = model.predict(input_data)
+    
+    # Result display
     st.balloons()
-    st.success(f"🎯 Model Prediction: **{prediction}**")
+    st.success(f"🎯 Model Prediction: **{prediction[0]}**")
